@@ -1,0 +1,32 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+/src/main/resources/static/certificates/client-cert.pem
+/src/main/resources/static/certificates/keystore.jks
+/src/main/resources/static/certificates/server-ca.pem
+/src/main/resources/static/certificates/cert.pkcs12
+/src/main/resources/static/certificates/cert.der
+/src/main/resources/static/certificates/truststore.jks
+/src/main/resources/static/certificates/client-key.pem
