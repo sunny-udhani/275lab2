@@ -7,49 +7,48 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import java.util.Map;
 
 @Controller
-//@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(path = "/")
 public class PassengerController {
 
     @Autowired
     private PassengerService passengerService;
 
-    @GetMapping(path="/passenger/{id}")
-    @Produces({MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public @ResponseBody
-    Response getUser(@PathVariable("id") int id,@RequestParam Map<String, String> params ) {
-        // This returns a JSON with the users
-        Response.ResponseBuilder rBuild = null;
-        Passenger p = passengerService.getPassengerById(id);
-        System.out.println(passengerService.getPassengerById(id));
-        System.out.println(params.containsKey("xml"));
-
-        if(params.containsKey("xml")){
-             rBuild = Response.ok(p, MediaType.APPLICATION_XML_VALUE);
-        }else{
-             rBuild = Response.ok(p, MediaType.APPLICATION_JSON_VALUE);
-        }
-        return rBuild.build();
-
-    }
-
-//    @GetMapping(path="/passenger/{id}?xml=true")
-//    @Produces(MediaType.APPLICATION_XML_VALUE)
-//    public @ResponseBody Passenger getUserXML(@PathVariable("id") int id) {
+//    @GetMapping(path = "/passenger/{id}")
+//    @Produces(MediaType.APPLICATION_JSON_VALUE)
+//    public @ResponseBody
+//    Passenger getUser(@PathVariable("id") int id, @RequestParam Map<String, String> params) {
 //        // This returns a JSON with the users
-//        System.out.println(passengerService.getPassengerById(params.get("id")));
+//        Response.ResponseBuilder rBuild = null;
+//        Passenger p = passengerService.getPassengerById(id);
+//        System.out.println(passengerService.getPassengerById(id));
+//        System.out.println(params.containsKey("xml"));
 //
-//        return passengerService.getPassengerById(params.get("id"));
+//        if (params.containsKey("xml")) {
+//            rBuild = Response.ok(p, MediaType.APPLICATION_XML_VALUE);
+//        } else {
+//            rBuild = Response.ok(p, MediaType.APPLICATION_JSON_VALUE);
+//        }
+//        return passengerService.getPassengerById(id);
+//
 //    }
 
-    @PostMapping(path="/passenger", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Passenger login(@RequestParam Map<String, String> params)
-    {
+    @GetMapping(path="/passenger/{id}")
+//    @Consumes(MediaType.ALL_VALUE)
+//    @Produces(value = {MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_XML_VALUE})
+    public @ResponseBody Passenger getUserXML(@PathVariable("id") int id, @RequestParam Map<String, String> params) {
+        // This returns a XML/JSON based on contentconfig.
+        return passengerService.getPassengerById(id);
+    }
+
+    @PostMapping(path = "/passenger", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    Passenger login(@RequestParam Map<String, String> params) {
 
         String fname = params.get("firstname");
         String lname = params.get("lastname");
