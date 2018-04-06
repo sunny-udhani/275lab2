@@ -2,8 +2,11 @@ package com.minisocial.book.controller;
 
 import com.minisocial.book.entity.Passenger;
 import com.minisocial.book.service.PassengerService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,14 +44,15 @@ public class PassengerController {
     @GetMapping(path="/passenger/{id}")
 //    @Consumes(MediaType.ALL_VALUE)
 //    @Produces(value = {MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_XML_VALUE})
-    public @ResponseBody Passenger getUserXML(@PathVariable("id") int id, @RequestParam Map<String, String> params) {
+    public @ResponseBody
+    ResponseEntity<?> getUserXML(@PathVariable("id") String id, @RequestParam Map<String, String> params) {
         // This returns a XML/JSON based on contentconfig.
-        return passengerService.getPassengerById(id);
+        JSONObject resp = passengerService.getPassengerById(id);
+        return new ResponseEntity<Object>(resp.toString(), HttpStatus.OK);
     }
 
     @PostMapping(path = "/passenger", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    Passenger login(@RequestParam Map<String, String> params) {
+    public @ResponseBody Response create(@RequestParam Map<String, String> params) {
 
         String fname = params.get("firstname");
         String lname = params.get("lastname");
@@ -63,8 +67,8 @@ public class PassengerController {
         p.setGender(gender);
         p.setPhone(phone);
 
-        passengerService.createPassenger(p);
-        return p;
+        JSONObject resp = passengerService.createPassenger(p);
+        return Response.ok(resp.toString()).build();
     }
 
 //    @PostMapping(path = "/checkLogin", consumes = MediaType.APPLICATION_JSON_VALUE)
