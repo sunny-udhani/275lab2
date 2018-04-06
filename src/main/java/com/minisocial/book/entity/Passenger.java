@@ -1,29 +1,40 @@
 package com.minisocial.book.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 //@XmlRootElement
 @Entity
 public class Passenger {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid",
+            strategy = "uuid")
+    private String id;
     private String firstname;
     private String lastname;
     private int age;
     private String gender;
+
+    @Column(unique = true)
     private String phone; // Phone numbers must be unique
 
-    public int getId() {
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "passenger")
+    private List<Reservation> reservationList;
+
+    @ManyToOne
+    @JoinColumn(name = "flight_id")
+    private Flight flight;
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -37,6 +48,14 @@ public class Passenger {
 
     public String getLastname() {
         return lastname;
+    }
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
     }
 
     public void setLastname(String lastname) {
@@ -65,5 +84,13 @@ public class Passenger {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public List<Reservation> getReservationList() {
+        return reservationList;
+    }
+
+    public void setReservationList(List<Reservation> reservationList) {
+        this.reservationList = reservationList;
     }
 }
