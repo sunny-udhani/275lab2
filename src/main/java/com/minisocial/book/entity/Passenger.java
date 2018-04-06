@@ -1,9 +1,9 @@
 package com.minisocial.book.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 //@XmlRootElement
@@ -24,8 +24,9 @@ public class Passenger {
     private String phone; // Phone numbers must be unique
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "passenger")
-    private List<Reservation> reservationList;
+    private List<Reservation> reservations;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "flight_id")
     private Flight flight;
@@ -86,11 +87,11 @@ public class Passenger {
         this.phone = phone;
     }
 
-    public List<Reservation> getReservationList() {
-        return reservationList;
+    public List<Reservation> getReservations() {
+        return reservations;
     }
 
-    public void setReservationList(List<Reservation> reservationList) {
-        this.reservationList = reservationList;
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }
