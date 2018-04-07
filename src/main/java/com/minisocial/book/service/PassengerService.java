@@ -52,13 +52,14 @@ public class PassengerService {
         }
 //        System.out.println("result");
 //        System.out.println(jsonInString);
-        JSONObject jsonobj = new JSONObject(jsonInString);
+        JSONObject jsonobj = new JSONObject().put("passenger", new JSONObject(jsonInString));
+        System.out.println("result : " + jsonobj.toString());
         return jsonobj.toString();
     }
 
     public String objToXML(Passenger passenger) {
 
-        return XML.toString(new JSONObject(objToJson(passenger)) , "passenger");
+        return XML.toString(new JSONObject(objToJson(passenger)));
     }
 
 }
