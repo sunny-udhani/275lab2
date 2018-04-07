@@ -1,7 +1,7 @@
 package com.minisocial.book.controller;
 
-import com.minisocial.book.entity.Passenger;
-import com.minisocial.book.service.PassengerService;
+import com.minisocial.book.entity.Reservation;
+import com.minisocial.book.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,11 +14,11 @@ import javax.ws.rs.core.Response;
 import java.util.Map;
 
 @Controller
-@RequestMapping(path = "/passenger")
-public class PassengerController {
+@RequestMapping(path = "/reservation")
+public class ReservationController {
 
     @Autowired
-    private PassengerService passengerService;
+    private ReservationService reservationService;
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Produces(MediaType.APPLICATION_JSON_VALUE)
@@ -26,39 +26,35 @@ public class PassengerController {
     ResponseEntity<?> getUser(@PathVariable("id") String id) {
         // This returns a JSON with the users
         Response.ResponseBuilder rBuild = null;
-        String p = passengerService.getPassengerById(id);
-        System.out.println(passengerService.getPassengerById(id));
+        String p = reservationService.getPassengerById(id);
+        System.out.println(reservationService.getPassengerById(id));
 
         return new ResponseEntity<Object>(p, HttpStatus.OK);
 
     }
 
-    @GetMapping(path="/{id}", params = "xml", produces = MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(path = "/{id}", params = "xml", produces = MediaType.APPLICATION_XML_VALUE)
 //    @Consumes(MediaType.ALL_VALUE)
     @Produces(MediaType.APPLICATION_XML_VALUE)
-    public @ResponseBody ResponseEntity<?> getUserXML(@PathVariable("id") String id, @RequestParam Map<String, String> params) {
+    public @ResponseBody
+    ResponseEntity<?> getUserXML(@PathVariable("id") String id, @RequestParam Map<String, String> params) {
         // This returns a XML/JSON based on contentconfig.
-        String resp = passengerService.getPassengerById(id, MediaType.APPLICATION_XML);
+        String resp = reservationService.getPassengerById(id, MediaType.APPLICATION_XML);
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
 
     @PostMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ResponseEntity<?> create(@RequestParam Map<String, String> params) {
+    public @ResponseBody
+    ResponseEntity<?> create(@RequestParam Map<String, String> params) {
 
-        String fname = params.get("firstname");
-        String lname = params.get("lastname");
-        String age = params.get("age");
-        String gender = params.get("gender");
-        String phone = params.get("phone");
 
-        Passenger p = new Passenger();
-        p.setAge(Integer.parseInt(age));
-        p.setFirstname(fname);
-        p.setLastname(lname);
-        p.setGender(gender);
-        p.setPhone(phone);
+        String passengerId = params.get("passengerId");
+        String flightLists = params.get("flightLists");
 
-        String resp = passengerService.createPassenger(p);
+        Reservation resp = new Reservation();
+//        reservation.
+
+//        String resp = reservationService.createPassenger(p);
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
 
