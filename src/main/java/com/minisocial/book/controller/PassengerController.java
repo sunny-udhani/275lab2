@@ -1,7 +1,12 @@
 package com.minisocial.book.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.minisocial.book.entity.Passenger;
 import com.minisocial.book.service.PassengerService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -61,7 +66,30 @@ public class PassengerController {
         String resp = passengerService.createPassenger(p);
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
+    
+    @PutMapping(path="/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody ResponseEntity<?> updatePassanger(@PathVariable("id") String id,@RequestParam Map<String, String> params) throws JsonProcessingException, JSONException {
 
+        String fname = params.get("firstname");
+        String lname = params.get("lastname");
+        String age = params.get("age");
+        String gender = params.get("gender");
+        String phone = params.get("phone");
+
+        String resp=passengerService.updatePassenger(id, fname, lname, age, gender, phone);
+        return new ResponseEntity<Object>(resp, HttpStatus.OK);
+    }
+    
+    @DeleteMapping(path="/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody ResponseEntity<?> deletePassenger(@PathVariable("id") String id) throws JSONException{
+    String resp;
+		resp = passengerService.delete(id);
+	
+    return new ResponseEntity<Object>(resp, HttpStatus.OK);
+	}
+    
+    
+    
 //    @PostMapping(path = "/checkLogin", consumes = MediaType.APPLICATION_JSON_VALUE)
 //    public ResponseEntity<?> login(@RequestBody String user, HttpSession session) {
 //        try {

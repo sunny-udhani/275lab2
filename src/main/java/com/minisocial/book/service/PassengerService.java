@@ -5,10 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.minisocial.book.entity.Passenger;
 import com.minisocial.book.repository.PassengerRepository;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -52,14 +55,59 @@ public class PassengerService {
         }
 //        System.out.println("result");
 //        System.out.println(jsonInString);
-        JSONObject jsonobj = new JSONObject().put("passenger", new JSONObject(jsonInString));
+        JSONObject jsonobj = null;
+		try {
+			jsonobj = new JSONObject().put("passenger", new JSONObject(jsonInString));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         System.out.println("result : " + jsonobj.toString());
         return jsonobj.toString();
     }
+    
+    
 
     public String objToXML(Passenger passenger) {
 
-        return XML.toString(new JSONObject(objToJson(passenger)));
+        try {
+			return XML.toString(new JSONObject(objToJson(passenger)));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
     }
+
+	public String updatePassenger(String id, String fname, String lname, String age, String gender,
+			String phone) throws JsonProcessingException, JSONException {
+		// TODO Auto-generated method stub
+		Passenger p = passengerRepository.findOne(id);
+		p.setFirstname(fname);
+		p.setLastname(lname);
+		p.setAge(Integer.parseInt(age));
+		p.setGender(gender);
+		p.setPhone(phone);
+		passengerRepository.save(p);
+		ObjectMapper mapperObj = new ObjectMapper();
+		String jso = mapperObj.writeValueAsString(p);
+		JSONObject j = new JSONObject("{\"passenger\":"+jso+"}");
+		return j.toString();
+	}
+
+	public String delete(String id) throws JSONException {
+		// TODO Auto-generated method stub
+		passengerRepository.delete(id);
+		JSONObject inner = new JSONObject();
+		JSONObject outer = new JSONObject();
+		inner.put("code", "200");
+		inner.put("msg", "Passenger with id " +id+" is deleted successfully");
+		outer.put("Response", inner);
+		return XML.toString(outer);
+	}
+	
+	
+    
 
 }
