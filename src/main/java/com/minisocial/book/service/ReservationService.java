@@ -21,12 +21,12 @@ public class ReservationService {
     private ReservationRepository reservationRepository;
 
     public String getPassengerById(String id, MediaType mediaType) {
-        Reservation p = reservationRepository.findByIdEquals(id);
+        Reservation p = reservationRepository.findByReservationNumberEquals(id);
         return (mediaType == MediaType.APPLICATION_XML) ? objToXML(p) : objToJson(p);
     }
 
     public String getPassengerById(String id) {
-        Reservation p = reservationRepository.findByIdEquals(id);
+        Reservation p = reservationRepository.findByReservationNumberEquals(id);
         return objToJson(p);
     }
 

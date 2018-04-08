@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ReservationRepository extends CrudRepository<Reservation, String> {
 
-    Reservation findByIdEquals(String id);
+    Reservation findByReservationNumberEquals(String id);
 }
