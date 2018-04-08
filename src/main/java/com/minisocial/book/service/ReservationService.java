@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.minisocial.book.entity.Passenger;
 import com.minisocial.book.entity.Reservation;
 import com.minisocial.book.repository.ReservationRepository;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,14 +53,26 @@ public class ReservationService {
         }
 //        System.out.println("result");
 //        System.out.println(jsonInString);
-        JSONObject jsonobj = new JSONObject().put("passenger", new JSONObject(jsonInString));
+        JSONObject jsonobj = null;
+		try {
+			jsonobj = new JSONObject().put("passenger", new JSONObject(jsonInString));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         System.out.println("result : " + jsonobj.toString());
         return jsonobj.toString();
     }
 
     public String objToXML(Reservation reservation) {
 
-        return XML.toString(new JSONObject(objToJson(reservation)));
+        try {
+			return XML.toString(new JSONObject(objToJson(reservation)));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
     }
 
 }

@@ -50,6 +50,7 @@ public class Passenger {
     public String getLastname() {
         return lastname;
     }
+    
 
     public Flight getFlight() {
         return flight;
