@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface PassengerRepository  extends CrudRepository<Passenger, String> {
     Passenger findByIdEquals(String id);
-    Passenger findOne(String id);
-    Passenger delete(String id);
+   // Passenger findOne(String id);
+    void deleteById(String id);
 }

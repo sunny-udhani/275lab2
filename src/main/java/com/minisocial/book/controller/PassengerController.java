@@ -3,8 +3,8 @@ package com.minisocial.book.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.minisocial.book.entity.Passenger;
+import com.minisocial.book.repository.PassengerRepository;
 import com.minisocial.book.service.PassengerService;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,7 @@ public class PassengerController {
 
     @Autowired
     private PassengerService passengerService;
+    
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Produces(MediaType.APPLICATION_JSON_VALUE)
@@ -32,7 +33,7 @@ public class PassengerController {
         // This returns a JSON with the users
         Response.ResponseBuilder rBuild = null;
         String p = passengerService.getPassengerById(id);
-        System.out.println(passengerService.getPassengerById(id));
+        System.out.println(passengerService.getPassengerById(id)+"adhjbnsdjhbashj");
 
         return new ResponseEntity<Object>(p, HttpStatus.OK);
 
@@ -72,20 +73,19 @@ public class PassengerController {
 
         String fname = params.get("firstname");
         String lname = params.get("lastname");
-        String age = params.get("age");
+        int age = Integer.parseInt(params.get("age"));
         String gender = params.get("gender");
         String phone = params.get("phone");
 
         String resp=passengerService.updatePassenger(id, fname, lname, age, gender, phone);
+       
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
     
     @DeleteMapping(path="/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody ResponseEntity<?> deletePassenger(@PathVariable("id") String id) throws JSONException{
-    String resp;
-		resp = passengerService.delete(id);
-	
-    return new ResponseEntity<Object>(resp, HttpStatus.OK);
+	public String deletePassenger(@PathVariable("id") String id) throws JSONException{
+    
+    	return passengerService.delete(id);
 	}
     
     

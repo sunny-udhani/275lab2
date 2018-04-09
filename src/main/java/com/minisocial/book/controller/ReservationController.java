@@ -58,11 +58,11 @@ public class ReservationController {
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
     
-    @PutMapping(path="/", produces=MediaTyoe.APPLICATION_JSON_VALUE)
+    @PutMapping(path="/", produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity<?> updateReservation(@PathVariable("id") String id, @RequestParam Map<String, String> params) {
         // This returns a XML/JSON based on contentconfig.
-       
+        Reservation resp = new Reservation();
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
 

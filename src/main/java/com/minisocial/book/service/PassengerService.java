@@ -80,13 +80,14 @@ public class PassengerService {
 		
     }
 
-	public String updatePassenger(String id, String fname, String lname, String age, String gender,
+	public String updatePassenger(String id, String fname, String lname, int age, String gender,
 			String phone) throws JsonProcessingException, JSONException {
 		// TODO Auto-generated method stub
-		Passenger p = passengerRepository.findOne(id);
+		//Passenger p = passengerRepository.findOne(id);
+		Passenger p = passengerRepository.findByIdEquals(id);
 		p.setFirstname(fname);
 		p.setLastname(lname);
-		p.setAge(Integer.parseInt(age));
+		p.setAge(age);
 		p.setGender(gender);
 		p.setPhone(phone);
 		passengerRepository.save(p);
@@ -98,7 +99,7 @@ public class PassengerService {
 
 	public String delete(String id) throws JSONException {
 		// TODO Auto-generated method stub
-		passengerRepository.delete(id);
+		passengerRepository.deleteById(id);
 		JSONObject inner = new JSONObject();
 		JSONObject outer = new JSONObject();
 		inner.put("code", "200");
