@@ -8,6 +8,6 @@ public interface FlightRepository  extends CrudRepository<Flight, String> {
 
 	void deleteByFlightNumber(String id);
 
-	Flight findByFlightIdEquals(String flightId);
+//	Flight findByFlightIdEquals(String flightId);
    
 }
