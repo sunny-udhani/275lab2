@@ -75,4 +75,17 @@ public class FlightService {
 	        flightRepository.save(p);
 	        return objToJson(p);
 	    }
+
+
+
+		public String delete(String id) throws JSONException {
+			// TODO Auto-generated method stub
+			flightRepository.deleteByFlightNumber(id);
+			JSONObject inner = new JSONObject();
+			JSONObject outer = new JSONObject();
+			inner.put("code", "200");
+			inner.put("msg", "Passenger with id " +id+" is deleted successfully");
+			outer.put("Response", inner);
+			return XML.toString(outer);
+		}
 }

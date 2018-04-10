@@ -13,33 +13,45 @@ public class Flight {
     private String origin;
     @Column(name = "destination")
     private String to;
-    int capacity;
-    String manufacturer;
-    String model;
+    
+    
+    //int capacity;
+    //String manufacturer;
+    //String model;
+   // String insert;
+    
 
-    public int getCapacity() {
-		return capacity;
-	}
+   // public String getInsert() {
+	//	return insert;
+//	}
 
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
-	}
+//	public void setInsert(String insert) {
+//		this.insert = insert;
+//	}
 
-	public String getManufacturer() {
-		return manufacturer;
-	}
+	//public int getCapacity() {
+	//	return capacity;
+	//}
 
-	public void setManufacturer(String manufacturer) {
-		this.manufacturer = manufacturer;
-	}
+	//public void setCapacity(int capacity) {
+	//	this.capacity = capacity;
+	//}
 
-	public String getModel() {
-		return model;
-	}
+	//public String getManufacturer() {
+	//	return manufacturer;
+	//}
 
-	public void setModel(String model) {
-		this.model = model;
-	}
+	//public void setManufacturer(String manufacturer) {
+	//	this.manufacturer = manufacturer;
+	//}
+
+	//public String getModel() {
+	//	return model;
+	//}
+
+	//public void setModel(String model) {
+	//	this.model = model;
+	//}
 
 	/*  Date format: yy-mm-dd-hh, do not include minutes and seconds.
      ** Example: 2018-03-22-19
@@ -91,16 +103,16 @@ public class Flight {
         this.to = to;
     }
 
-    public Date getDepartureTime() {
-        return departureTime;
+    public String getDepartureTime() {
+        return departureTime.toString();
     }
 
     public void setDepartureTime(Date departureTime) {
         this.departureTime = departureTime;
     }
 
-    public Date getArrivalTime() {
-        return arrivalTime;
+    public String getArrivalTime() {
+        return arrivalTime.toString();
     }
 
     public void setArrivalTime(Date arrivalTime) {

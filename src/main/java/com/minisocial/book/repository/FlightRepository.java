@@ -5,5 +5,9 @@ import org.springframework.data.repository.CrudRepository;
 import com.minisocial.book.entity.Flight;
 public interface FlightRepository  extends CrudRepository<Flight, String> {
     Flight findByFlightNumberEquals(String id);
+
+	void deleteByFlightNumber(String id);
+
+	Flight findByFlightIdEquals(String flightId);
    
 }

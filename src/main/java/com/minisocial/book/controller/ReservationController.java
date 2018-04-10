@@ -1,7 +1,10 @@
 package com.minisocial.book.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.minisocial.book.entity.Reservation;
 import com.minisocial.book.service.ReservationService;
+
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+
+import java.text.ParseException;
 import java.util.Map;
 
 @Controller
@@ -45,16 +50,15 @@ public class ReservationController {
 
     @PostMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<?> create(@RequestParam Map<String, String> params) {
+    ResponseEntity<?> create(@RequestParam Map<String, String> params) throws JsonProcessingException, JSONException, ParseException {
 
 
         String passengerId = params.get("passengerId");
-        String flightLists = params.get("flightLists");
+        String flightList = params.get("flightLists");
 
-        Reservation resp = new Reservation();
-//        reservation.
 
-//        String resp = reservationService.createPassenger(p);
+ 	String [] flightLists = flightList.split(","); 
+ 	 String resp = reservationService.createReservation(passengerId,flightLists);
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
     
