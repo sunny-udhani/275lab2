@@ -13,8 +13,35 @@ public class Flight {
     private String origin;
     @Column(name = "destination")
     private String to;
+    int capacity;
+    String manufacturer;
+    String model;
 
-    /*  Date format: yy-mm-dd-hh, do not include minutes and seconds.
+    public int getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
+	}
+
+	public String getManufacturer() {
+		return manufacturer;
+	}
+
+	public void setManufacturer(String manufacturer) {
+		this.manufacturer = manufacturer;
+	}
+
+	public String getModel() {
+		return model;
+	}
+
+	public void setModel(String model) {
+		this.model = model;
+	}
+
+	/*  Date format: yy-mm-dd-hh, do not include minutes and seconds.
      ** Example: 2018-03-22-19
      ** The system only needs to supports PST. You can ignore other time zones.
      */
@@ -83,7 +110,10 @@ public class Flight {
     public int getSeatsLeft() {
         return seatsLeft;
     }
-
+    
+    
+    
+    
     public void setSeatsLeft(int seatsLeft) {
         this.seatsLeft = seatsLeft;
     }
