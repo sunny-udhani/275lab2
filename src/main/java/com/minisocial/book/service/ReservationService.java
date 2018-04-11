@@ -34,7 +34,7 @@ public class ReservationService {
     @Autowired
     private FlightRepository flightRepository;
 
-    public String getReservationById(String id, MediaType mediaType) {
+    public String getReservationById(String id, MediaType mediaType) throws JSONException {
         if (reservationRepository.existsById(id)) {
             Reservation p = reservationRepository.findByReservationNumberEquals(id);
             return (mediaType == MediaType.APPLICATION_XML) ? p.getXML() : p.getFullJSON().toString();
@@ -42,7 +42,7 @@ public class ReservationService {
         return (mediaType == MediaType.APPLICATION_XML) ? new Message(" Reservation with number " + id + " does not exist", "404").getXML() : new Message(" Reservation with number " + id + " does not exist", "404").getMessageJSON().toString();
     }
 
-    public String getReservationById(String id) {
+    public String getReservationById(String id) throws JSONException {
         if (reservationRepository.existsById(id)) {
             Reservation p = reservationRepository.findByReservationNumberEquals(id);
             return p.getFullJSON().toString();
@@ -113,7 +113,7 @@ public class ReservationService {
         }
     }
 
-    public ResponseEntity<Object> updateReservation(String id, List<String> flightsAdded, List<String> flightsRemoved) {
+    public ResponseEntity<Object> updateReservation(String id, List<String> flightsAdded, List<String> flightsRemoved) throws JSONException {
         try {
             System.out.println("Entered Try");
             if ((flightsAdded == null || flightsAdded.isEmpty()) && (flightsRemoved == null || flightsRemoved.isEmpty())) {

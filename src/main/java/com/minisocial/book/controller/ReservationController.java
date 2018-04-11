@@ -34,7 +34,7 @@ public class ReservationController {
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<?> getReservation(@PathVariable("id") String id) {
+    ResponseEntity<?> getReservation(@PathVariable("id") String id) throws JSONException {
         // This returns a JSON with the users
         String p = reservationService.getReservationById(id);
         System.out.println(reservationService.getReservationById(id));
@@ -47,7 +47,7 @@ public class ReservationController {
 //    @Consumes(MediaType.ALL_VALUE)
     @Produces(MediaType.APPLICATION_XML_VALUE)
     public @ResponseBody
-    ResponseEntity<?> getReservationXML(@PathVariable("id") String id, @RequestParam Map<String, String> params) {
+    ResponseEntity<?> getReservationXML(@PathVariable("id") String id, @RequestParam Map<String, String> params) throws JSONException {
         // This returns a XML/JSON based on contentconfig.
         String resp = reservationService.getReservationById(id, MediaType.APPLICATION_XML);
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
@@ -69,7 +69,7 @@ public class ReservationController {
     @PostMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity<?> updateReservation(@PathVariable("id") String id, @RequestParam(required = false) List<String> flightsAdded,
-                                        @RequestParam(required = false) List<String> flightsRemoved) {
+                                        @RequestParam(required = false) List<String> flightsRemoved) throws JSONException {
         // This returns a XML/JSON based on contentconfig.
 
         ResponseEntity<Object> response = reservationService.updateReservation(id, flightsAdded, flightsRemoved);
@@ -96,12 +96,13 @@ public class ReservationController {
      * @param from         Source
      * @param to           Destination
      * @param flightNumber Flight Number
+     * @throws JSONException 
      */
     @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<Object> searchReservationByAllParam(@RequestParam(required = false) String passengerId,
                                                               @RequestParam(required = false) String from,
                                                               @RequestParam(required = false) String to,
-                                                              @RequestParam(required = false) String flightNumber) {
+                                                              @RequestParam(required = false) String flightNumber) throws JSONException {
         List<Reservation> reservations = null;
         JSONObject result = new JSONObject();
         JSONArray reservationArray = new JSONArray();

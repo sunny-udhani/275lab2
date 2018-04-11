@@ -27,18 +27,18 @@ public class PassengerService {
     @Autowired
     private FlightRepository flightRepository;
 
-    public String getPassengerById(String id, MediaType mediaType) {
+    public String getPassengerById(String id, MediaType mediaType) throws JSONException {
         Passenger p = passengerRepository.findByIdEquals(id);
         return (mediaType == MediaType.APPLICATION_XML) ? p.getXML() : p.getFullJSON().toString();
     }
 
-    public String getPassengerById(String id) {
+    public String getPassengerById(String id) throws JSONException {
         Passenger p = passengerRepository.findByIdEquals(id);
         return p.getFullJSON().toString();
     }
 
 //    @Transactional
-    public String createPassenger(Passenger p) {
+    public String createPassenger(Passenger p) throws JSONException {
         passengerRepository.save(p);
         return p.getFullJSON().toString();
     }
