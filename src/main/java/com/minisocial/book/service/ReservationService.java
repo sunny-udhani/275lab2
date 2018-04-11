@@ -164,7 +164,7 @@ public class ReservationService {
                         passenger = reservation.getPassenger();
                         List<Flight> passengerFlights = passenger.getFlights();
 
-                        if (checkOverlap(passenger, flightsToBeAdded)) {
+                        if (!checkOverlap(passenger, flightsToBeAdded)) {
                             System.out.println("No overlap");
                             double newTotal = reservation.getPrice();
                             List<Flight> flightList = reservation.getFlights();
@@ -187,7 +187,7 @@ public class ReservationService {
                 }
                 passengerRepository.save(passenger);
                 reservationRepository.save(reservation);
-                reservation.getFullJSON().toString();
+               return new ResponseEntity(reservation.getFullJSON().toString(), HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
             System.out.println("In catch");
@@ -195,9 +195,9 @@ public class ReservationService {
             Message error = new Message(e.toString(), "404");
             return new ResponseEntity(error.getMessageJSON().toString(), HttpStatus.NOT_FOUND);
         }
-        Message error = new Message("not working", "404");
+//        Message error = new Message("not working", "404");
 
-        return new ResponseEntity(error.getMessageJSON().toString(), HttpStatus.NOT_FOUND);
+//        return new ResponseEntity(error.getMessageJSON().toString(), HttpStatus.NOT_FOUND);
     }
 
 //    public Iterable<Users> getAllUsers(){

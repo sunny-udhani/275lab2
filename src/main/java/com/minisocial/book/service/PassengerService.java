@@ -37,7 +37,7 @@ public class PassengerService {
         return p.getFullJSON().toString();
     }
 
-    @Transactional
+//    @Transactional
     public String createPassenger(Passenger p) {
         passengerRepository.save(p);
         return p.getFullJSON().toString();
@@ -96,10 +96,7 @@ public class PassengerService {
         } catch (DataIntegrityViolationException ex) {
             return new Message("Cannot update , passenger with same phone number already exists", "400").getMessageJSON().toString();
         }
-        ObjectMapper mapperObj = new ObjectMapper();
-        String jso = mapperObj.writeValueAsString(p);
-        JSONObject j = new JSONObject("{\"passenger\":" + jso + "}");
-        return j.toString();
+      return p.getFullJSON().toString();
     }
 
     public boolean deletePassenger(String id) throws JSONException {
