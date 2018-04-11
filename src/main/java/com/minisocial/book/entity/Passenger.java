@@ -2,6 +2,9 @@ package com.minisocial.book.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.XML;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,13 +26,16 @@ public class Passenger {
     @Column(unique = true)
     private String phone; // Phone numbers must be unique
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "passenger")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "passenger", cascade = CascadeType.REMOVE)
     private List<Reservation> reservations;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "flight_id")
-    private Flight flight;
+    @ManyToMany
+    @JoinTable(
+            name = "passenger_flights",
+            joinColumns = @JoinColumn(name = "passenger_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "flight_number", referencedColumnName = "flight_id"))
+    private List<Flight> flights;
 
     public String getId() {
         return id;
@@ -50,14 +56,13 @@ public class Passenger {
     public String getLastname() {
         return lastname;
     }
-    
 
-    public Flight getFlight() {
-        return flight;
+    public List<Flight> getFlights() {
+        return flights;
     }
 
-    public void setFlight(Flight flight) {
-        this.flight = flight;
+    public void setFlights(List<Flight> flights) {
+        this.flights = flights;
     }
 
     public void setLastname(String lastname) {
@@ -94,5 +99,53 @@ public class Passenger {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    /**
+     * Passenger data inclusive of Reservation details
+     *
+     * @return JSONObject
+     */
+    public JSONObject getFullJSON() {
+        JSONObject result = new JSONObject();
+        JSONObject passenger = this.getJSON();
+        JSONArray reservationArray = new JSONArray();
+        if ( this.getReservations() != null && !this.getReservations().isEmpty()) {
+            for (Reservation res : this.getReservations()) {
+                JSONObject reservation = res.getFullJSON();
+                JSONObject reserv = reservation.getJSONObject("reservation");
+                reserv.remove("passenger");
+                reservation.put("reservation", reserv);
+                reservationArray.put(reservation);
+            }
+        }
+        passenger.put("reservations", reservationArray);
+        result.put("passenger", passenger);
+        return result;
+    }
+
+    /**
+     * Passenger data as XML
+     *
+     * @return String
+     */
+    public String getXML() {
+        return XML.toString(this.getFullJSON());
+    }
+
+    /**
+     * Passenger data excluding Reservation details
+     *
+     * @return JSONObject
+     */
+    public JSONObject getJSON() {
+        JSONObject passenger = new JSONObject();
+        passenger.put("id", this.getId());
+        passenger.put("firstname", this.getFirstname());
+        passenger.put("lastname", this.getLastname());
+        passenger.put("age", this.getAge());
+        passenger.put("gender", this.getGender());
+        passenger.put("phone", this.getPhone());
+        return passenger;
     }
 }

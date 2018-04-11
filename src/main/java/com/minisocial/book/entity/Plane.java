@@ -1,5 +1,7 @@
 package com.minisocial.book.entity;
 
+import org.json.JSONObject;
+
 import javax.persistence.Embeddable;
 
 @Embeddable
@@ -40,4 +42,30 @@ public class Plane {
     public void setYear(int year) {
         this.year = year;
     }
+
+    public Plane(int capacity, String model, String manufacturer, int year) {
+        this.capacity = capacity;
+        this.model = model;
+        this.manufacturer = manufacturer;
+        this.year = year;
+    }
+    public Plane() {
+    }
+
+    /**
+
+     * Plane details as JSON
+     *
+     * @return JSONObject
+     */
+    public JSONObject getJSON() {
+        JSONObject plane = new JSONObject();
+        plane.put("capacity", this.getCapacity());
+        plane.put("model", this.getModel());
+        plane.put("manufacturer", this.getManufacturer());
+        plane.put("year", this.getYear());
+        return plane;
+    }
+
+
 }

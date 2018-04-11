@@ -1,8 +1,11 @@
 package com.minisocial.book.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.XML;
 
-import javax.annotation.Generated;
 import javax.persistence.*;
 import java.util.List;
 
@@ -15,12 +18,13 @@ public class Reservation {
     @Column(name = "reservation_id")
     private String reservationNumber;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "passenger_id")
     private Passenger passenger;
     private double price; // sum of each flight’s price.
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "reservation_flights",
             joinColumns = @JoinColumn(name = "reservation_id", referencedColumnName = "reservation_id"),
             inverseJoinColumns = @JoinColumn(name = "flight_id", referencedColumnName = "flight_id"))
@@ -56,5 +60,34 @@ public class Reservation {
 
     public void setFlights(List<Flight> flights) {
         this.flights = flights;
+    }
+
+    /**
+     * JSON representation of Reservation inclusive of Flight details
+     *
+     * @return JSONObject
+     */
+    public JSONObject getFullJSON() {
+        JSONObject result = new JSONObject();
+        JSONObject reserv = new JSONObject();
+        reserv.put("orderNumber", this.getReservationNumber());
+        reserv.put("price", this.getPrice());
+        JSONArray flights = new JSONArray();
+        for (Flight flight : this.getFlights()) {
+            flights.put(flight.getJSON());
+        }
+        reserv.put("flights", new JSONObject().put("flight", flights));
+        reserv.put("passenger", this.getPassenger().getJSON());
+        result.put("reservation", reserv);
+        return result;
+    }
+
+    /**
+     * XML representation of Reservation JSONObject
+     *
+     * @return String
+     */
+    public String getXML() {
+        return XML.toString(getFullJSON());
     }
 }

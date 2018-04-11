@@ -1,5 +1,9 @@
 package com.minisocial.book.entity;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.XML;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -13,50 +17,7 @@ public class Flight {
     private String origin;
     @Column(name = "destination")
     private String to;
-    
-    
-    //int capacity;
-    //String manufacturer;
-    //String model;
-   // String insert;
-    
 
-   // public String getInsert() {
-	//	return insert;
-//	}
-
-//	public void setInsert(String insert) {
-//		this.insert = insert;
-//	}
-
-	//public int getCapacity() {
-	//	return capacity;
-	//}
-
-	//public void setCapacity(int capacity) {
-	//	this.capacity = capacity;
-	//}
-
-	//public String getManufacturer() {
-	//	return manufacturer;
-	//}
-
-	//public void setManufacturer(String manufacturer) {
-	//	this.manufacturer = manufacturer;
-	//}
-
-	//public String getModel() {
-	//	return model;
-	//}
-
-	//public void setModel(String model) {
-	//	this.model = model;
-	//}
-
-	/*  Date format: yy-mm-dd-hh, do not include minutes and seconds.
-     ** Example: 2018-03-22-19
-     ** The system only needs to supports PST. You can ignore other time zones.
-     */
     private Date departureTime;
     private Date arrivalTime;
     private int seatsLeft;
@@ -65,9 +26,11 @@ public class Flight {
     @Embedded
     private Plane plane;  // Embedded
 
-    @OneToMany(mappedBy = "flight")
+    //    @JsonIgnore
+    @ManyToMany(mappedBy = "flights")
     private List<Passenger> passengers;
 
+    //    @JsonIgnore
     @ManyToMany(mappedBy = "flights")
     private List<Reservation> reservation;
 
@@ -122,10 +85,7 @@ public class Flight {
     public int getSeatsLeft() {
         return seatsLeft;
     }
-    
-    
-    
-    
+
     public void setSeatsLeft(int seatsLeft) {
         this.seatsLeft = seatsLeft;
     }
@@ -160,6 +120,57 @@ public class Flight {
 
     public void setReservation(List<Reservation> reservation) {
         this.reservation = reservation;
+    }
+
+    /**
+     * Flight Data as JSONObject excluding Passengers
+     *
+     * @return JSONObject
+     */
+    public JSONObject getJSON() {
+        JSONObject flightJson = new JSONObject();
+        flightJson.put("number", this.getFlightNumber());
+        flightJson.put("price", this.getPrice());
+        flightJson.put("from", this.getOrigin());
+        flightJson.put("to", this.getTo());
+        flightJson.put("departureTime", this.getDepartureTime());
+        flightJson.put("arrivalTime", this.getArrivalTime());
+        flightJson.put("seatsLeft", this.getSeatsLeft());
+        flightJson.put("description", this.getDescription());
+        flightJson.put("plane", this.getPlane().getJSON());
+        return flightJson;
+    }
+
+    /**
+     * Flight Data as JSONObject inclusive of all Passengers details
+     *
+     * @return JSONObject
+     */
+    public JSONObject getFullJson() {
+        JSONObject resultObject = new JSONObject();
+        JSONObject flight = this.getJSON();
+        JSONObject passengers = new JSONObject();
+        JSONArray passengerArray = new JSONArray();
+
+        if (this.getPassengers() != null && !this.getPassengers().isEmpty()) {
+            for (Passenger passenger : this.getPassengers()) {
+                JSONObject pass = passenger.getJSON();
+                passengerArray.put(pass);
+            }
+        }
+        passengers.put("passenger", passengerArray);
+        flight.put("passengers", passengers);
+        resultObject.put("flight", flight);
+        return resultObject;
+    }
+
+    /**
+     * XML representation of flight JSONObject
+     *
+     * @return String
+     */
+    public String getXML() {
+        return XML.toString(this.getFullJson());
     }
 
 }

@@ -1,13 +1,12 @@
 package com.minisocial.book.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.minisocial.book.entity.Message;
 import com.minisocial.book.entity.Passenger;
-import com.minisocial.book.repository.PassengerRepository;
 import com.minisocial.book.service.PassengerService;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,39 +23,41 @@ public class PassengerController {
 
     @Autowired
     private PassengerService passengerService;
-    
+
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<?> getUser(@PathVariable("id") String id) {
-        // This returns a JSON with the users
-        Response.ResponseBuilder rBuild = null;
+    ResponseEntity<?> getPassenger(@PathVariable("id") String id) {
+
         String p = passengerService.getPassengerById(id);
-        System.out.println(passengerService.getPassengerById(id)+"adhjbnsdjhbashj");
+//        System.out.println(passengerService.getPassengerById(id) + "adhjbnsdjhbashj");
 
         return new ResponseEntity<Object>(p, HttpStatus.OK);
 
     }
 
-    @GetMapping(path="/{id}", params = "xml", produces = MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(path = "/{id}", params = "xml", produces = MediaType.APPLICATION_XML_VALUE)
 //    @Consumes(MediaType.ALL_VALUE)
     @Produces(MediaType.APPLICATION_XML_VALUE)
-    public @ResponseBody ResponseEntity<?> getUserXML(@PathVariable("id") String id, @RequestParam Map<String, String> params) {
+    public @ResponseBody
+    ResponseEntity<?> getPassengerXML(@PathVariable("id") String id, @RequestParam Map<String, String> params) {
         // This returns a XML/JSON based on contentconfig.
         String resp = passengerService.getPassengerById(id, MediaType.APPLICATION_XML);
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ResponseEntity<?> create(@RequestParam Map<String, String> params) {
-
+    @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    ResponseEntity<?> create(@RequestParam Map<String, String> params) {
+        Message errorMessage = null;
+        boolean errorFlag = false;
         String fname = params.get("firstname");
         String lname = params.get("lastname");
         String age = params.get("age");
         String gender = params.get("gender");
         String phone = params.get("phone");
-
+        String resp = null;
         Passenger p = new Passenger();
         p.setAge(Integer.parseInt(age));
         p.setFirstname(fname);
@@ -64,97 +65,43 @@ public class PassengerController {
         p.setGender(gender);
         p.setPhone(phone);
 
-        String resp = passengerService.createPassenger(p);
+        try {
+            resp = passengerService.createPassenger(p);
+        } catch (DataIntegrityViolationException ex) {
+            errorMessage = new Message("Another passenger with the same Phone number already exists", "400");
+            errorFlag = true;
+        }
+        if (errorFlag)
+            return new ResponseEntity<Object>(errorMessage.getMessageJSON().toString(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
-    
-    @PutMapping(path="/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ResponseEntity<?> updatePassanger(@PathVariable("id") String id,@RequestParam Map<String, String> params) throws JsonProcessingException, JSONException {
 
+    @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    ResponseEntity<?> updatePassenger(@PathVariable("id") String id, @RequestParam Map<String, String> params) throws JsonProcessingException, JSONException {
+
+        Message errorMessage = null;
+        boolean errorFlag = false;
         String fname = params.get("firstname");
         String lname = params.get("lastname");
         int age = Integer.parseInt(params.get("age"));
         String gender = params.get("gender");
         String phone = params.get("phone");
 
-        String resp=passengerService.updatePassenger(id, fname, lname, age, gender, phone);
-       
+        String resp = passengerService.updatePassenger(id, fname, lname, age, gender, phone);
+
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
     }
-    
-    @DeleteMapping(path="/{id}",produces=MediaType.APPLICATION_JSON_VALUE)
-	public String deletePassenger(@PathVariable("id") String id) throws JSONException{
-    
-    	return passengerService.delete(id);
-	}
-    
-    
-    
-//    @PostMapping(path = "/checkLogin", consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<?> login(@RequestBody String user, HttpSession session) {
-//        try {
-//
-//        JSONObject userObj = new JSONObject(user);
-//        System.out.println(userObj);
-//        session.setAttribute("name", userObj.getString("inputUsername"));
-//
-//        Users userVO = userService.login(userObj.getString("inputUsername"), userObj.getString("inputPassword"))
-//                .orElseThrow(IllegalArgumentException::new);
-//        System.out.println(userVO.getUserEmail());
-//
-//            session.setAttribute("userId", userVO.getId());
-//        return new ResponseEntity(userVO, HttpStatus.OK);
-//        }catch (Exception ex){
-//            System.out.println(ex);
-//            return new ResponseEntity(ex, HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
-//    @PostMapping(path = "/listFiles", consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<?> listFiles(@RequestBody String req, HttpSession session) {
-//        try {
-//
-//        JSONObject userObj = new JSONObject(req);
-//        System.out.println(userObj);
-//        int userId = Integer.parseInt(session.getAttribute("userId").toString()) ;
-//        Users user = userService.findUserById(userId).orElse(new Users());
-//        List<FileDetails> fileDetailsList = fileDetailsService.listFiles(user);
-//
-//        for(FileDetails file : fileDetailsList){
-//            System.out.println(file.getFileName());
-//        }
-//
-//        return new ResponseEntity(fileDetailsList, HttpStatus.OK);
-//        }catch (Exception ex){
-//            System.out.println(ex);
-//            return new ResponseEntity(ex, HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
-//    @PostMapping(path = "/registerUser", consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<?> registration(@RequestBody String user, HttpSession session) {
-//        try {
-//            JSONObject userObj = new JSONObject(user);
-//            Users newuser = new Users();
-//            newuser.setUserEmail(userObj.getString("userEmail"));
-//            newuser.setUserPassword(userObj.getString("password"));
-//            newuser.setUserFirstName(userObj.getString("firstName"));
-//            newuser.setUserLastName(userObj.getString("lastName"));
-//
-//            DateFormat formatter = new SimpleDateFormat("YYYY-MM-DD");
-//            newuser.setUserBDate((Date) formatter.parse(userObj.getString("dob")));
-//            System.out.println(newuser.getUserBDate());
-//            System.out.println(userObj.getString("dob"));
-//
-//            userService.addUser(newuser);
-//            return new ResponseEntity(newuser,HttpStatus.OK);
-//        } catch (ParseException err) {
-//            System.out.println(err);
-//            return new ResponseEntity<Object>(err,HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//        catch (Exception err) {
-//            System.out.println(err);
-//            return new ResponseEntity<Object>(err,HttpStatus.BAD_REQUEST);
-//        }
-//    }
+
+    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody
+    ResponseEntity<?> deletePassenger(@PathVariable("id") String id) throws JSONException {
+        Message success = new Message("Passenger with id " + id + " is deleted successfully ", "200");
+        Message error = new Message("Passenger with id " + id + " does not exist", "404");
+
+        if (!passengerService.deletePassenger(id))
+            return new ResponseEntity<Object>(error.getMessageJSON().toString(), HttpStatus.OK);
+        return new ResponseEntity<Object>(success.getXML(), HttpStatus.OK);
+    }
+
 }
