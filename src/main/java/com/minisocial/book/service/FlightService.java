@@ -148,6 +148,7 @@ public class FlightService {
     }
 
 
+    @Transactional
     public String deleteFlight(String id) throws JSONException {
         // TODO Auto-generated method stub
 
@@ -164,7 +165,7 @@ public class FlightService {
             } else {
                 message.setCode("200");
                 message.setMessage("Flight with number " + id + " is deleted successfully ");
-                flightRepository.deleteByFlightNumber(id);
+                flightRepository.deleteByFlightNumberEquals(id);
                 return message.getMessageJSON().toString();
             }
         }
