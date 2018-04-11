@@ -28,13 +28,31 @@ public class PassengerService {
     private FlightRepository flightRepository;
 
     public String getPassengerById(String id, MediaType mediaType) {
-        Passenger p = passengerRepository.findByIdEquals(id);
-        return (mediaType == MediaType.APPLICATION_XML) ? p.getXML() : p.getFullJSON().toString();
+        if(passengerRepository.existsById(id))
+        {
+
+            Passenger p = passengerRepository.findByIdEquals(id);
+            return (mediaType == MediaType.APPLICATION_XML) ? p.getXML() : p.getFullJSON().toString();
+        }
+        else
+        {
+            Message error=new Message("Sorry, the requested passenger with id " + id + " does not exist","404");
+            return mediaType == MediaType.APPLICATION_JSON? error.getXML() : (error.getMessageJSON().toString());
+        }
     }
 
     public String getPassengerById(String id) {
-        Passenger p = passengerRepository.findByIdEquals(id);
-        return p.getFullJSON().toString();
+        if(passengerRepository.existsById(id))
+        {
+            Passenger p = passengerRepository.findByIdEquals(id);
+            return p.getFullJSON().toString();
+        }
+        else
+        {
+            Message error=new Message("Sorry, the requested passenger with id " + id + " does not exist","404");
+            return (error.getMessageJSON().toString());
+        }
+
     }
 
 //    @Transactional

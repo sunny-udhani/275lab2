@@ -83,7 +83,7 @@ public class ReservationController {
         Message error = new Message("Reservation with number " + id + " does not exist", "404");
 
         if (!reservationService.deleteReservation(id))
-            return new ResponseEntity<Object>(error.getMessageJSON().toString(), HttpStatus.OK);
+            return new ResponseEntity<Object>(error.getXML(), HttpStatus.OK);
 
         return new ResponseEntity<Object>(success.getXML(), HttpStatus.OK);
     }

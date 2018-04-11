@@ -138,7 +138,7 @@ public class FlightService {
                 else
                     flight.setSeatsLeft(existingFlight.getSeatsLeft() + changeInCapacity);
                 flightRepository.save(flight);
-                return flight.getFullJson().toString();
+                return flight.getXML();
 
             }
         } catch (Exception e) {
