@@ -73,7 +73,7 @@ public class FlightService {
 
     }
 
-    public String getFlight(String id) {
+    public String getFlight(String id) throws JSONException {
         if (flightRepository.existsById(id)) {
             Flight p = flightRepository.findByFlightNumberEquals(id);
             return p.getFullJson().toString();
@@ -82,7 +82,7 @@ public class FlightService {
     }
 
 
-    public String getFlight(String id, MediaType media) {
+    public String getFlight(String id, MediaType media) throws JSONException {
         if (flightRepository.existsById(id)) {
             Flight p = flightRepository.findByFlightNumberEquals(id);
             return (media == MediaType.APPLICATION_XML) ? p.getXML() : objToJson(p);

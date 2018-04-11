@@ -1,6 +1,7 @@
 package com.minisocial.book.entity;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
@@ -126,8 +127,9 @@ public class Flight {
      * Flight Data as JSONObject excluding Passengers
      *
      * @return JSONObject
+     * @throws JSONException 
      */
-    public JSONObject getJSON() {
+    public JSONObject getJSON() throws JSONException {
         JSONObject flightJson = new JSONObject();
         flightJson.put("number", this.getFlightNumber());
         flightJson.put("price", this.getPrice());
@@ -145,8 +147,9 @@ public class Flight {
      * Flight Data as JSONObject inclusive of all Passengers details
      *
      * @return JSONObject
+     * @throws JSONException 
      */
-    public JSONObject getFullJson() {
+    public JSONObject getFullJson() throws JSONException {
         JSONObject resultObject = new JSONObject();
         JSONObject flight = this.getJSON();
         JSONObject passengers = new JSONObject();
@@ -168,8 +171,9 @@ public class Flight {
      * XML representation of flight JSONObject
      *
      * @return String
+     * @throws JSONException 
      */
-    public String getXML() {
+    public String getXML() throws JSONException {
         return XML.toString(this.getFullJson());
     }
 

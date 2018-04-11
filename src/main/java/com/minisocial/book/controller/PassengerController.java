@@ -28,7 +28,7 @@ public class PassengerController {
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<?> getPassenger(@PathVariable("id") String id) {
+    ResponseEntity<?> getPassenger(@PathVariable("id") String id) throws JSONException {
 
         String p = passengerService.getPassengerById(id);
 //        System.out.println(passengerService.getPassengerById(id) + "adhjbnsdjhbashj");
@@ -41,7 +41,7 @@ public class PassengerController {
 //    @Consumes(MediaType.ALL_VALUE)
     @Produces(MediaType.APPLICATION_XML_VALUE)
     public @ResponseBody
-    ResponseEntity<?> getPassengerXML(@PathVariable("id") String id, @RequestParam Map<String, String> params) {
+    ResponseEntity<?> getPassengerXML(@PathVariable("id") String id, @RequestParam Map<String, String> params) throws JSONException {
         // This returns a XML/JSON based on contentconfig.
         String resp = passengerService.getPassengerById(id, MediaType.APPLICATION_XML);
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
@@ -49,7 +49,7 @@ public class PassengerController {
 
     @PostMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<?> create(@RequestParam Map<String, String> params) {
+    ResponseEntity<?> create(@RequestParam Map<String, String> params) throws JSONException {
         Message errorMessage = null;
         boolean errorFlag = false;
         String fname = params.get("firstname");

@@ -37,7 +37,7 @@ public class FlightController {
     @GetMapping(path = "/{flightNumber}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Produces(MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<?> getFlight(@PathVariable("flightNumber") String id) {
+    ResponseEntity<?> getFlight(@PathVariable("flightNumber") String id) throws JSONException {
         String resp = flightService.getFlight(id);
         return new ResponseEntity<Object>(resp, HttpStatus.OK);
 
@@ -46,7 +46,7 @@ public class FlightController {
     @GetMapping(path = "/{flightNumber}", params = "xml", produces = MediaType.APPLICATION_XML_VALUE)
     @Produces(MediaType.APPLICATION_XML_VALUE)
     public @ResponseBody
-    ResponseEntity<?> getFlightXML(@PathVariable("flightNumber") String id, @RequestParam Map<String, String> params) {
+    ResponseEntity<?> getFlightXML(@PathVariable("flightNumber") String id, @RequestParam Map<String, String> params) throws JSONException {
         // This returns a XML/JSON based on contentconfig.
         String resp = flightService.getFlight(id, MediaType.APPLICATION_XML);
         return new ResponseEntity<Object>(resp, HttpStatus.OK);

@@ -1,5 +1,6 @@
 package com.minisocial.book.entity;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
@@ -41,8 +42,9 @@ public class Message
     /**
      * JSON representation of Message
      * @return JSONObject
+     * @throws JSONException 
      */
-    public JSONObject getMessageJSON()
+    public JSONObject getMessageJSON() throws JSONException
     {
         JSONObject error=new JSONObject();
         JSONObject messageType=new JSONObject();
@@ -55,8 +57,9 @@ public class Message
     /**
      * XML representation of Message
      * @return String
+     * @throws JSONException 
      */
-    public String getXML()
+    public String getXML() throws JSONException
     {
         return XML.toString(getMessageJSON());
     }

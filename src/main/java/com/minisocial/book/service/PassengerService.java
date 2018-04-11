@@ -27,7 +27,7 @@ public class PassengerService {
     @Autowired
     private FlightRepository flightRepository;
 
-    public String getPassengerById(String id, MediaType mediaType) {
+    public String getPassengerById(String id, MediaType mediaType)throws JSONException  {
         if(passengerRepository.existsById(id))
         {
 
@@ -41,7 +41,7 @@ public class PassengerService {
         }
     }
 
-    public String getPassengerById(String id) {
+    public String getPassengerById(String id)throws JSONException  {
         if(passengerRepository.existsById(id))
         {
             Passenger p = passengerRepository.findByIdEquals(id);
@@ -56,7 +56,7 @@ public class PassengerService {
     }
 
 //    @Transactional
-    public String createPassenger(Passenger p) {
+    public String createPassenger(Passenger p) throws JSONException {
         passengerRepository.save(p);
         return p.getFullJSON().toString();
     }

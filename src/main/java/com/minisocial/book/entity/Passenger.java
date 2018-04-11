@@ -3,6 +3,7 @@ package com.minisocial.book.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 
@@ -105,8 +106,9 @@ public class Passenger {
      * Passenger data inclusive of Reservation details
      *
      * @return JSONObject
+     * @throws JSONException 
      */
-    public JSONObject getFullJSON() {
+    public JSONObject getFullJSON() throws JSONException {
         JSONObject result = new JSONObject();
         JSONObject passenger = this.getJSON();
         JSONArray reservationArray = new JSONArray();
@@ -128,8 +130,9 @@ public class Passenger {
      * Passenger data as XML
      *
      * @return String
+     * @throws JSONException 
      */
-    public String getXML() {
+    public String getXML() throws JSONException {
         return XML.toString(this.getFullJSON());
     }
 
@@ -137,8 +140,9 @@ public class Passenger {
      * Passenger data excluding Reservation details
      *
      * @return JSONObject
+     * @throws JSONException 
      */
-    public JSONObject getJSON() {
+    public JSONObject getJSON() throws JSONException {
         JSONObject passenger = new JSONObject();
         passenger.put("id", this.getId());
         passenger.put("firstname", this.getFirstname());

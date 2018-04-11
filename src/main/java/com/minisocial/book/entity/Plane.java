@@ -1,5 +1,6 @@
 package com.minisocial.book.entity;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.persistence.Embeddable;
@@ -57,8 +58,9 @@ public class Plane {
      * Plane details as JSON
      *
      * @return JSONObject
+     * @throws JSONException 
      */
-    public JSONObject getJSON() {
+    public JSONObject getJSON() throws JSONException {
         JSONObject plane = new JSONObject();
         plane.put("capacity", this.getCapacity());
         plane.put("model", this.getModel());
